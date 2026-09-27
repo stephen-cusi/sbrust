@@ -3,6 +3,6 @@ members = [
     "gmod",
     "gmod-macros",
     "examples/my-first-binary-module",
-    "host-test",
+    "tests/host-test",
 ]
 resolver = "2"

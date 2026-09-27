@@ -1,0 +1,4 @@
+# HL2SB (sbrust): stable Rust only -- the nightly features upstream gmod-rs
+# needed (thread_id_value, internal_output_capture) are patched out.
+[toolchain]
+channel = "stable"

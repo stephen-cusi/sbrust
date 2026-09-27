@@ -1,49 +1,33 @@
-# Installing Rust
+# my-first-binary-module（HL2SB sbrust）
 
-Installing Rust is as easy as downloading [rustup](https://rustup.rs/) and running it!
+上游同名示例的移植版：println 之外，还通过状态自身的 `print` 打招呼
+（进游戏控制台和 hl2sb_lua.log 都可见）、注册 `sbrust.ping()` 做往返验证、
+`gmod13_close` 卸载时自报。
 
-# Building the example
+## 构建
 
-To build the example in debug mode, you'll need to specify the target architecture for your build.
+| 平台 | 命令 |
+|---|---|
+| Windows x64 | `cargo build --target x86_64-pc-windows-msvc --release` |
+| Android arm64 | `cargo build --target aarch64-linux-android --release` |
+| Android armv7 | `cargo build --target armv7-linux-androideabi --release` |
 
-| Platform | Command | Description |
-|:---:|:---:|:---:|
-| `win32` | `cargo build --target i686-pc-windows-msvc` | Windows 32-bit<br>Use this if your server is running Windows and is on the `main` branch of Garry's Mod (this is the default branch.) |
-| `win64` | `cargo build --target x86_64-pc-windows-msvc` | Windows 64-bit<br>Use this if your server is running Windows and is on the `x86-64` branch of Garry's Mod. |
-| `linux` | `cargo build --target i686-unknown-linux-gnu` | Linux 32-bit<br>Use this if your server is running Linux and is on the `main` branch of Garry's Mod (this is the default branch.) |
-| `linux64` | `cargo build --target x86_64-unknown-linux-gnu` |Linux 64-bit<br>Use this if your server is running Linux and is on the `x86-64` branch of Garry's Mod. |
+## 安装与测试
 
-You can find the compiled binary in `target/<TARGET>/debug/my_first_binary_module.dll` on Windows or `target/<TARGET>/debug/libmy_first_binary_module.so` on Linux.
+把 `target/<TARGET>/release/my_first_binary_module.dll`（.so）改名放进
+`<游戏目录>/lua/bin/`：
 
-If Rust complains it can't find the target/toolchain, you'll need to install it. By default Rust only installs your system's native toolchain, which is most likely Windows 64-bit (`x86_64-pc-windows-msvc`)
+| 产物名 | realm |
+|---|---|
+| `gmsv_my_first_binary_module_win64.dll` | 服务器 |
+| `gmcl_my_first_binary_module_win64.dll` | 客户端 |
+| `gmsv_my_first_binary_module_android64.so` | 安卓（服务器/菜单） |
 
-I don't recommend cross-compiling Linux binaries on Windows. If you want to compile Linux binaries on Windows, do it in WSL.
-
-# Using the example in Garry's Mod
-
-First, rename the compiled binary to `gmsv_my_first_binary_module_PLATFORM.dll` where `PLATFORM` is one of the following:
-
-| Platform | Description |
-|:---:|:---:|
-| `win32` | Windows 32-bit<br>Use this if your server is running Windows and is on the `main` branch of Garry's Mod (this is the default branch.) |
-| `win64` | Windows 64-bit<br>Use this if your server is running Windows and is on the `x86-64` branch of Garry's Mod. |
-| `linux` | Linux 32-bit<br>Use this if your server is running Linux and is on the `main` branch of Garry's Mod (this is the default branch.) |
-| `linux64` | Linux 64-bit<br>Use this if your server is running Linux and is on the `x86-64` branch of Garry's Mod. |
-
-Then, move the compiled binary to `garrysmod/lua/bin/` on your server. If the `bin` folder doesn't exist, create it.
-
-Finally, you can load the module from Lua!
+游戏内：
 
 ```lua
-require("my_first_binary_module")
+require( "my_first_binary_module" )   -- gmod13_open：控制台打印问候
+print( sbrust.ping() )                -- pong from Rust!
 ```
 
-# Preparing your module for release
-
-If you've written a useful module and want to release it to the world, or just on your server, build with the `--release` flag:
-
-`cargo build --target <TARGET> --release`
-
-This enables performance optimization of the compiled binary and removes debug symbols which make the binary huge, whilst taking longer to compile.
-
-On Linux, you'll want to run the `strip` command on the compiled binary to remove debug symbols.
+换图后状态重建，`gmod13_close` 会自报一次；再 require 或经 autorun 会重新加载。
