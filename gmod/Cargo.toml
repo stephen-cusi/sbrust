@@ -1,0 +1,18 @@
+[package]
+name = "gmod"
+version = "54.0.0"
+authors = ["William Venner <william@venner.io>", "HL2SB sbrust port"]
+edition = "2021"
+license = "MIT"
+description = "GMod-style binary module bindings for HL2SB's Lua 5.4 lua_shared (forked from gmod-rs, ABI re-targeted 5.1/LuaJIT -> 5.4)"
+
+[lib]
+# HL2SB: stable Rust only -- the nightly features upstream needed
+# (thread_id_value, internal_output_capture) are patched out.
+
+[dependencies]
+gmod-macros = { version = "2.0.1", path = "../gmod-macros" }
+
+libloading = "0"
+cstr = "0"
+lazy_static = "1"

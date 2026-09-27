@@ -1,0 +1,12 @@
+[package]
+name = "host-test"
+version = "0.1.0"
+edition = "2021"
+publish = false
+
+# HL2SB (sbrust): standalone Lua host -- loads the deployed lua_shared.dll,
+# installs the same binary-module searcher the engine uses, and requires the
+# built module.  Proves the whole chain without launching the game.
+
+[dependencies]
+libloading = "0"

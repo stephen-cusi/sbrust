@@ -1,0 +1,8 @@
+[workspace]
+members = [
+    "gmod",
+    "gmod-macros",
+    "examples/my-first-binary-module",
+    "host-test",
+]
+resolver = "2"
